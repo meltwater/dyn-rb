@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,38 +23,38 @@ module Dyn
         @dyn = dyn
       end
 
-      def list(startindex="0")
-        @dyn.get("#{resource_path}", {startindex:startindex})
+      def list(startindex = '0')
+        @dyn.get("#{resource_path}", startindex: startindex)
       end
 
-      def create(email, seeding="0")
-        @dyn.post("#{resource_path}", {emailaddress:email, seeding:seeding})
+      def create(email, seeding = '0')
+        @dyn.post("#{resource_path}", emailaddress: email, seeding: seeding)
       end
 
-      def update(email, seeding="0")
-        @dyn.post("#{resource_path}", {emailaddress:email, seeding:seeding})
+      def update(email, seeding = '0')
+        @dyn.post("#{resource_path}", emailaddress: email, seeding: seeding)
       end
 
       def destroy(email)
-        @dyn.post("#{resource_path}/delete", {emailaddress:email})
+        @dyn.post("#{resource_path}/delete", emailaddress: email)
       end
 
       def details(email)
-        @dyn.get("#{resource_path}/details", {emailaddress:email})
+        @dyn.get("#{resource_path}/details", emailaddress: email)
       end
 
       def status(email)
-        @dyn.get("#{resource_path}/status", {emailaddress:email})
+        @dyn.get("#{resource_path}/status", emailaddress: email)
       end
 
       def dkim(email, dkim)
-        @dyn.post("#{resource_path}/dkim", {emailaddress:email, dkim:dkim})
+        @dyn.post("#{resource_path}/dkim", emailaddress: email, dkim: dkim)
       end
-      
+
       private
-      
+
       def resource_path
-        "senders"
+        'senders'
       end
     end
   end

@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,23 +25,23 @@ module Dyn
       def initialize(host, port, protocol = 'http')
         @host = host
         @port = port
-        @base_url = "#{protocol}://#{host}:#{port.to_s}"
-        @default_headers = {"User-Agent" => "dyn-rb 0.0.1"}
+        @base_url = "#{protocol}://#{host}:#{port}"
+        @default_headers = { 'User-Agent' => 'dyn-rb 0.0.1' }
       end
 
       def request(method, uri, body, headers)
         if (method == :HEAD) && body
-          raise ArgumentError, "#{method} must not contain a body!"
+          fail ArgumentError, "#{method} must not contain a body!"
         end
         headers = @default_headers.merge(headers || {})
-        original = {:method => method, :base_url => @base_url, :path => uri, :body => body, :headers => headers}
+        original = { method: method, base_url: @base_url, path: uri, body: body, headers: headers }
         fixedup  = fixup_request(original)
 
         @request_handler.call(fixedup) if @request_handler
 
         response = perform_request(fixedup[:method], fixedup[:path], fixedup[:body], fixedup[:headers])
 
-        @response_handler.call({:status => response.status, :body => response.body, :headers => response.headers}) if @response_handler
+        @response_handler.call(status: response.status, body: response.body, headers: response.headers) if @response_handler
 
         response
       end
@@ -72,14 +72,14 @@ module Dyn
         original
       end
 
-      def perform_request(method, uri, body, headers)
-        raise 'not implemented!'
+      def perform_request(_method, _uri, _body, _headers)
+        fail 'not implemented!'
       end
     end
 
     class Response
       attr_reader :status, :body, :headers
-    
+
       def initialize(status, body, headers)
         @status  = status
         @body    = body

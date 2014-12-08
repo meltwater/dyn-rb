@@ -2,14 +2,14 @@ require 'dyn-rb'
 
 d = Dyn::Traffic::Client.new('yourcustomername', 'yourusername', 'yourpassword')
 
-d.zone = "example.com"
+d.zone = 'example.com'
 
 # puts d.zone.create(:rname => "test@example.com", :ttl => 30)
 puts d.zone.get_all.inspect
 
-d.a.fqdn("foo.example.com").ttl(3600).address("192.168.1.1").save(:replace)
-d.cname.fqdn("foo2.example.com").cname("ec2-10-10-10-10.amazonaws.com").save(:replace)
-d.http_redirect.fqdn("cool.example.com").code(301).keep_uri("Y").url("https://maint.example.com").save(:replace)
+d.a.fqdn('foo.example.com').ttl(3600).address('192.168.1.1').save(:replace)
+d.cname.fqdn('foo2.example.com').cname('ec2-10-10-10-10.amazonaws.com').save(:replace)
+d.http_redirect.fqdn('cool.example.com').code(301).keep_uri('Y').url('https://maint.example.com').save(:replace)
 
 puts d.zone.publish
 

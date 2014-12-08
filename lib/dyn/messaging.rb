@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,9 +46,9 @@ module Dyn
       #
       # @param [String] Your dyn api key
       # @param [Boolean] Verbosity
-      def initialize(apikey, verbose=false)
+      def initialize(apikey, verbose = false)
         @apikey = apikey
-        @rest = Dyn::HttpClient::DefaultClient.new("emailapi.dynect.net", "443", "https")
+        @rest = Dyn::HttpClient::DefaultClient.new('emailapi.dynect.net', '443', 'https')
         @rest.default_headers = {
           'User-Agent'   => Dyn::VERSION,
           'Content-Type' => 'application/x-www-form-urlencoded'
@@ -115,7 +115,7 @@ module Dyn
       # @param [Hash] Query Parameters
       # @param [Hash] Additional HTTP headers
       def get(path_part, query_params = {}, additional_headers = {}, &block)
-        api_request { @rest.get("/rest/json/#{path_part}?" + URI.encode_www_form(query_params.merge({apikey:@apikey})), nil, additional_headers, &block) }
+        api_request { @rest.get("/rest/json/#{path_part}?" + URI.encode_www_form(query_params.merge(apikey: @apikey)), nil, additional_headers, &block) }
       end
 
       # Raw POST request, formatted for Dyn. See list of endpoints at:
@@ -128,7 +128,7 @@ module Dyn
       # @param [Hash] The data structure to submit as the body, is automatically turned to encoded Form POST
       # @param [Hash] Additional HTTP headers
       def post(path_part, form_params = {}, additional_headers = {}, &block)
-        api_request { @rest.post("/rest/json/#{path_part}", URI.encode_www_form(form_params.merge({apikey:@apikey})), additional_headers, &block) }
+        api_request { @rest.post("/rest/json/#{path_part}", URI.encode_www_form(form_params.merge(apikey: @apikey)), additional_headers, &block) }
       end
 
       # Handles making Dynect API requests and formatting the responses properly.
@@ -139,9 +139,9 @@ module Dyn
         end
 
         response = JSON.parse(response_body || '{}')
-        
-        if (response["response"] && response["response"]["status"] == 200)
-          response["response"]["data"]
+
+        if response['response'] && response['response']['status'] == 200
+          response['response']['data']
         else
           response
         end

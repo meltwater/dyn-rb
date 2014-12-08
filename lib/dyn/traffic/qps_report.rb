@@ -8,21 +8,21 @@ module Dyn
         @csv = csv
       end
 
-      def csv()
+      def csv
         value ? (@csv = value; self) : @csv
       end
 
       def resource_path
-        "QPSReport"
+        'QPSReport'
       end
 
-      def create(csv)
+      def create(_csv)
         @dyn.create("#{resource_path}")
       end
 
       def to_json
         {
-          "csv" => @csv,
+          'csv' => @csv
         }.to_json
       end
     end

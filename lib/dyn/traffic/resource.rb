@@ -8,9 +8,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@ module Dyn
     class Resource
       attr_accessor :fqdn, :record_type, :record_id, :ttl, :zone, :rdata
 
-      def initialize(dyn, zone, record_type, fqdn=nil, record_id=nil, ttl=nil, rdata={})
+      def initialize(dyn, zone, record_type, fqdn = nil, record_id = nil, ttl = nil, rdata = {})
         @dyn = dyn
         @fqdn = fqdn
         @record_type = record_type
@@ -41,49 +41,49 @@ module Dyn
         @rdata[rdata_key] = rdata_value
       end
 
-      def fqdn(value=nil)
+      def fqdn(value = nil)
         value ? (@fqdn = value; self) : @fqdn
       end
 
-      def record_id(value=nil)
+      def record_id(value = nil)
         value ? (@record_id = value; self) : @record_id
       end
 
-      def ttl(value=nil)
+      def ttl(value = nil)
         value ? (@ttl = value; self) : @ttl
       end
 
-      def resource_path(full=false)
-        @record_type << "Record" unless @record_type[-6,6] == "Record"
-        if (full == true || full == :full)
+      def resource_path(full = false)
+        @record_type << 'Record' unless @record_type[-6, 6] == 'Record'
+        if full == true || full == :full
           "/REST/#{@record_type}/#{@zone}"
         else
           "#{@record_type}/#{@zone}"
         end
       end
 
-      def get(fqdn = nil, record_id=nil)
+      def get(fqdn = nil, record_id = nil)
         if record_id && fqdn
           raw_rr = @dyn.get("#{resource_path}/#{fqdn}/#{record_id}")
           Dyn::Traffic::Resource.new(@dyn,
-                                   raw_rr["zone"],
-                                   raw_rr["record_type"],
-                                   raw_rr["fqdn"],
-                                   raw_rr["record_id"],
-                                   raw_rr["ttl"],
-                                   raw_rr["rdata"])
+                                     raw_rr['zone'],
+                                     raw_rr['record_type'],
+                                     raw_rr['fqdn'],
+                                     raw_rr['record_id'],
+                                     raw_rr['ttl'],
+                                     raw_rr['rdata'])
         elsif fqdn
           results = @dyn.get("#{resource_path}/#{fqdn}")
           raw_rr_list = results.map do |record|
-            if (record =~ /^#{resource_path(:full)}\/#{Regexp.escape(fqdn)}\/(\d+)$/)
-              self.get(fqdn, $1)
+            if record =~ /^#{resource_path(:full)}\/#{Regexp.escape(fqdn)}\/(\d+)$/
+              get(fqdn, Regexp.last_match[1])
             else
               record
             end
           end
           case raw_rr_list.length
           when 0
-            raise Dyn::Exceptions::RequestFailed, "Cannot find #{record_type} record for #{fqdn}"
+            fail Dyn::Exceptions::RequestFailed, "Cannot find #{record_type} record for #{fqdn}"
           when 1
             raw_rr_list[0]
           else
@@ -104,7 +104,7 @@ module Dyn
         results
       end
 
-      def save(replace=false)
+      def save(replace = false)
         if record_id
           @dyn.put("#{resource_path}/#{@fqdn}/#{record_id}", self)
         else
@@ -128,23 +128,22 @@ module Dyn
 
       def to_json
         {
-          "rdata" => @rdata,
-          "ttl"   => @ttl
+          'rdata' => @rdata,
+          'ttl'   => @ttl
         }.to_json
       end
 
-      def method_missing(method_symbol, *args, &block)
+      def method_missing(method_symbol, *args, &_block)
         method_string = method_symbol.to_s
-        if (args.length > 0 && method_string !~ /=$/)
+        if args.length > 0 && method_string !~ /=$/
           @rdata[method_string] = args.length == 1 ? args[0] : args
           self
-        elsif @rdata.has_key?(method_string)
+        elsif @rdata.key?(method_string)
           @rdata[method_string]
         else
-          raise NoMethodError, "undefined method `#{method_symbol.to_s}' for #{self.class.to_s}"
+          fail NoMethodError, "undefined method `#{method_symbol}' for #{self.class}"
         end
       end
-
     end
   end
 end

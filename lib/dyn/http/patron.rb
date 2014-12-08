@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,11 +25,11 @@ module Dyn
       def fixup_request(original)
         headers = original[:headers]
 
-        if !original[:body].nil? && headers["Content-Type"].nil?
-          headers = headers.merge({"Content-Type" => "application/x-www-form-urlencoded"})
+        if !original[:body].nil? && headers['Content-Type'].nil?
+          headers = headers.merge('Content-Type' => 'application/x-www-form-urlencoded')
         end
 
-        original.merge({:headers => headers})
+        original.merge(headers: headers)
       end
 
       def perform_request(method, uri, body, headers)
@@ -43,7 +43,7 @@ module Dyn
         Response.new(response.status, response.body, response.headers)
       end
     end
-    
+
     unless defined?(DefaultClient)
       class DefaultClient < Dynect::HttpClient::PatronClient
       end

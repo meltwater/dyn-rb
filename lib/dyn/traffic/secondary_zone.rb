@@ -8,78 +8,78 @@ module Dyn
         @zone = zone
         @fqdn = fqdn
         @contact_nickname = contact_nickname
-        @tsig_key_name = tsig_key_name  
+        @tsig_key_name = tsig_key_name
         @activate = activate
         @deactivate = deactivate
         @retransfer = retransfer
       end
 
-      def zone(value=nil)
+      def zone(value = nil)
         value ? (@zone = value; self) : @zone
       end
 
-      def fqdn(value=nil)
+      def fqdn(value = nil)
         value ? (@fqdn = value; self) : @fqdn
       end
 
-      def contact_nickname()
+      def contact_nickname
         value ? (@contact_nickname = value; self) : @contact_nickname
       end
 
-      def tsig_key_name()
+      def tsig_key_name
         value ? (@tsig_key_name = value; self) : @tsig_key_name
       end
 
-      def activate()
+      def activate
         value ? (@activate = value; self) : @activate
       end
-      
-      def deactivate()
+
+      def deactivate
         value ? (@deactivate = value; self) : @deactivate
       end
-      
-      def retransfer()
+
+      def retransfer
         value ? (@retransfer = value; self) : @retransfer
       end
 
       def resource_path
-        "Secondary"
+        'Secondary'
       end
 
-      def create(contact_nickname, masters, tsig)
+      def create(_contact_nickname, _masters, _tsig)
         @dyn.create("#{resource_path}")
       end
 
-      def get()
+      def get
         @dyn.get("#{resource_path}")
       end
 
-      def update(contact_nickname, masters, tsig)
+      def update(_contact_nickname, _masters, _tsig)
         @dyn.update("#{resource_path}")
       end
 
-      def activate(activate=true)
+      def activate(_activate = true)
         @dyn.update("#{resource_path}")
       end
 
-      def deactivate(deactivate=true)
+      def deactivate(_deactivate = true)
         @dyn.update("#{resource_path}")
       end
 
-      def retransfer(retransfer=true)
+      def retransfer(_retransfer = true)
         @dyn.update("#{resource_path}")
       end
 
       def to_json
         {
-          "zone" => @zone,
-          "fqdn" => @fqdn,
-          "contact_nickname" => @contact_nickname,
-          "masters" => @masters,
-          "tsig" => @tsig,
-          "activate" => @activate,
-          "deactivate" => @deactivate,
-          "retransfer" => @retransfer
+          'zone' => @zone,
+          'fqdn' => @fqdn,
+          'contact_nickname' => @contact_nickname,
+          'masters' => @masters,
+          'tsig' => @tsig,
+          'activate' => @activate,
+          'deactivate' => @deactivate,
+          'retransfer' => @retransfer
         }.to_json
       end
     end

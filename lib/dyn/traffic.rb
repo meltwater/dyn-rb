@@ -8,9 +8,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,16 +47,16 @@ module Dyn
       # @param [String] The zone you are going to be editing
       # @param [Boolean] Whether to connect immediately or not - runs login for you
       # @param [Boolean] Verbosity
-      def initialize(customer_name, user_name, password, zone=nil, connect=true, verbose=false, max_redirects=10)
+      def initialize(customer_name, user_name, password, zone = nil, connect = true, verbose = false, _max_redirects = 10)
         @customer_name = customer_name
         @user_name = user_name
         @password = password
-        @rest = Dyn::HttpClient::DefaultClient.new("api2.dynect.net", "443", "https")
+        @rest = Dyn::HttpClient::DefaultClient.new('api2.dynect.net', '443', 'https')
         @rest.default_headers = {
           'User-Agent'   => Dyn::VERSION,
           'Content-Type' => 'application/json'
         }
-        @zone = zone 
+        @zone = zone
         @verbose = verbose
         @session = Dyn::Traffic::Session.new(self)
         login if connect
@@ -68,10 +68,10 @@ module Dyn
       #
       # @return [Hash] The dynect API response
       def login
-       response = @session.create
-       @auth_token = response["token"]
-       @rest.default_headers = { 'Content-Type' => 'application/json', 'Auth-Token' => @auth_token }
-       response
+        response = @session.create
+        @auth_token = response['token']
+        @rest.default_headers = { 'Content-Type' => 'application/json', 'Auth-Token' => @auth_token }
+        response
       end
 
       # Logout of Dyn - generally the last operation performed
@@ -80,10 +80,10 @@ module Dyn
       #
       # @return [Hash] The dynect API response
       def logout
-       response = @session.delete
-       @auth_token = nil
-       @rest.default_headers = { 'Content-Type' => 'application/json' }
-       response
+        response = @session.delete
+        @auth_token = nil
+        @rest.default_headers = { 'Content-Type' => 'application/json' }
+        response
       end
 
       # for convenience...
@@ -99,9 +99,7 @@ module Dyn
       ##
       # Zone attribute setter
       ##
-      def zone=(zone)
-        @zone = zone
-      end
+      attr_writer :zone
 
       ##
       # HTTPRedirect API
@@ -135,9 +133,9 @@ module Dyn
       def self.underscore(string)
         word = string.dup
         word.gsub!(/::/, '/')
-        word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
-        word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-        word.tr!("-", "_")
+        word.gsub!(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+        word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
+        word.tr!('-', '_')
         word.downcase!
         word
       end
@@ -145,7 +143,7 @@ module Dyn
       ##
       # Resource Record API
       ##
-      %w{AAAA A CNAME DNSKEY DS KEY LOC MX NS PTR RP SOA SRV TXT}.each do |record_type|
+      %w(AAAA A CNAME DNSKEY DS KEY LOC MX NS PTR RP SOA SRV TXT).each do |record_type|
         define_method underscore(record_type) do
           Dyn::Traffic::Resource.new(self, @zone, "#{record_type}")
         end
@@ -168,7 +166,7 @@ module Dyn
       # @param [String] The partial path to DELETE - for example, 'User' or 'Zone'.
       # @param [Hash] Additional HTTP headers
       def delete(path_part, additional_headers = {}, &block)
-        api_request { @rest.delete('/REST/' + path_part, "", additional_headers, &block) }
+        api_request { @rest.delete('/REST/' + path_part, '', additional_headers, &block) }
       end
 
       # Raw POST request, formatted for Dyn. See list of endpoints at:
@@ -200,34 +198,34 @@ module Dyn
       # Handles making Dynect API requests and formatting the responses properly.
       def api_request(&block)
         response = block.call
-        if response.status == 307 and response.body =~ /^\/REST\//
-          response.body.sub!('/REST/','') 
+        if response.status == 307 && response.body =~ /^\/REST\//
+          response.body.sub!('/REST/', '')
           response = get(response.body)
         end
         parse_response(JSON.parse(response.body || '{}'))
       end
 
       def parse_response(response)
-        case response["status"]
-        when "success"
-          response["data"]
-        when "incomplete"
+        case response['status']
+        when 'success'
+          response['data']
+        when 'incomplete'
           # we get 'incomplete' when the API is running slow and claims the session has a previous job running
           # raise an error and return the job ID in case we want to ask the API what the job's status is
           error_messages = []
-          error_messages.push( "This session may have a job _still_ running (slowly). Call /REST/Job/#{response["job_id"]} to get its status." )
-          if response["msgs"]
-            response["msgs"].each do |error_message|
-              error_messages << "#{error_message["LVL"]} #{error_message["ERR_CD"]} #{error_message["SOURCE"]} - #{error_message["INFO"]}"
+          error_messages.push("This session may have a job _still_ running (slowly). Call /REST/Job/#{response['job_id']} to get its status.")
+          if response['msgs']
+            response['msgs'].each do |error_message|
+              error_messages << "#{error_message['LVL']} #{error_message['ERR_CD']} #{error_message['SOURCE']} - #{error_message['INFO']}"
             end
           end
-          raise Dyn::Exceptions::IncompleteRequest.new( "#{error_messages.join("\n")}", response["job_id"] )
-        when "failure"
+          fail Dyn::Exceptions::IncompleteRequest.new("#{error_messages.join("\n")}", response['job_id'])
+        when 'failure'
           error_messages = []
-          response["msgs"].each do |error_message|
-            error_messages << "#{error_message["LVL"]} #{error_message["ERR_CD"]} #{error_message["SOURCE"]} - #{error_message["INFO"]}"
+          response['msgs'].each do |error_message|
+            error_messages << "#{error_message['LVL']} #{error_message['ERR_CD']} #{error_message['SOURCE']} - #{error_message['INFO']}"
           end
-          raise Dyn::Exceptions::RequestFailed, "Request failed: #{error_messages.join("\n")}" 
+          fail Dyn::Exceptions::RequestFailed, "Request failed: #{error_messages.join("\n")}"
         end
       end
     end
