@@ -13,7 +13,7 @@ describe Dyn::Messaging::Client do
       start_index = 40
       email_address = 'abc@domain.com'
 
-      stub = stub_request(:get, "#{@API_BASE_PATH}/reports/bounces?apikey=#{@DEFAULT_API_KEY}&starttime=#{start_time}&endtime=#{end_time}&startindex=#{start_index}&emailaddress=#{email_address}")
+      stub = stub_request(:get, "#{@api_base_path}/reports/bounces?apikey=#{@default_api_key}&starttime=#{start_time}&endtime=#{end_time}&startindex=#{start_index}&emailaddress=#{email_address}")
       subject.send(:list, start_time, end_time, start_index, email_address)
       expect(stub).to have_been_requested
     end

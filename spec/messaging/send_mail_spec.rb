@@ -12,8 +12,8 @@ describe Dyn::Messaging::Client do
     }
 
     it 'should send an email' do
-      stub = stub_request(:post, "#{@API_BASE_PATH}/send")
-             .with(body: { 'apikey' => "#{@DEFAULT_API_KEY}", 'from' => 'a', 'to' => 'b', 'subject' => 'c', 'bodytext' => 'd', 'bodyhtml' => 'e', 'cc' => 'f', 'replyto' => 'g' }.merge(headers))
+      stub = stub_request(:post, "#{@api_base_path}/send")
+             .with(body: { 'apikey' => "#{@default_api_key}", 'from' => 'a', 'to' => 'b', 'subject' => 'c', 'bodytext' => 'd', 'bodyhtml' => 'e', 'cc' => 'f', 'replyto' => 'g' }.merge(headers))
 
       subject.send(:create, 'a', 'b', 'c', 'd', 'e', 'f', 'g', headers)
 

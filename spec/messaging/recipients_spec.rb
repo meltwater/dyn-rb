@@ -9,7 +9,7 @@ describe Dyn::Messaging::Client do
 
     it 'should retrieve the status of an email address' do
 
-      stub = stub_request(:get, "#{@API_BASE_PATH}/recipients/status?apikey=#{@DEFAULT_API_KEY}&emailaddress=#{emailaddress}")
+      stub = stub_request(:get, "#{@api_base_path}/recipients/status?apikey=#{@default_api_key}&emailaddress=#{emailaddress}")
 
       subject.send(:status, emailaddress)
 
@@ -17,8 +17,8 @@ describe Dyn::Messaging::Client do
     end
 
     it 'should activate an email address' do
-      stub = stub_request(:post, "#{@API_BASE_PATH}/recipients/activate")
-             .with(body: { 'apikey' => "#{@DEFAULT_API_KEY}", 'emailaddress' => emailaddress })
+      stub = stub_request(:post, "#{@api_base_path}/recipients/activate")
+             .with(body: { 'apikey' => "#{@default_api_key}", 'emailaddress' => emailaddress })
 
       subject.send(:activate, emailaddress)
 

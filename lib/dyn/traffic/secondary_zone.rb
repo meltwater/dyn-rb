@@ -72,14 +72,14 @@ module Dyn
 
       def to_json
         {
-          'zone' => @zone,
-          'fqdn' => @fqdn,
+          'zone'             => @zone,
+          'fqdn'             => @fqdn,
           'contact_nickname' => @contact_nickname,
-          'masters' => @masters,
-          'tsig' => @tsig,
-          'activate' => @activate,
-          'deactivate' => @deactivate,
-          'retransfer' => @retransfer
+          'masters'          => @masters,
+          'tsig'             => @tsig,
+          'activate'         => @activate,
+          'deactivate'       => @deactivate,
+          'retransfer'       => @retransfer
         }.to_json
       end
     end

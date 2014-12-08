@@ -8,10 +8,10 @@ to = 'Recipient <client@somecompany.com>'
 subject = 'Test send from Ruby Client'
 bodytext = 'This is a test of the Ruby Client'
 xheaders = {
-  'X-Campaign' => 'value1',
-  'X-Local' => 'value2',
+  'X-Campaign'      => 'value1',
+  'X-Local'         => 'value2',
   'X-TheFooRemains' => 'true',
-  'X-theFourth' => 'empty'
+  'X-theFourth'     => 'empty'
 }
 
 # accounts

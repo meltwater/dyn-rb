@@ -28,10 +28,10 @@ module Dyn
 
       def create(options)
         @dyn.post("Zone/#{@zone}",
-                  zone: @zone,
-                  rname: options[:rname],
+                  zone:         @zone,
+                  rname:        options[:rname],
                   serial_style: options[:serial_style],
-                  ttl: options[:ttl]
+                  ttl:          options[:ttl]
           )
       end
 

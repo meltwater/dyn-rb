@@ -107,21 +107,21 @@ module Dyn
           host_list = {}
           region['pool'].each do |h|
             host_list[h['address']] = {
-              address: h['address'],
-              label: h['label'],
-              weight: h['weight'],
+              address:    h['address'],
+              label:      h['label'],
+              weight:     h['weight'],
               serve_mode: h['serve_mode']
             }
           end
           Dyn::Traffic::GSLB.new(@dyn, results['zone'],
-                                 fqdn: results['fqdn'],
-                                 ttl: results['ttl'],
-                                 host_list: host_list,
+                                 fqdn:         results['fqdn'],
+                                 ttl:          results['ttl'],
+                                 host_list:    host_list,
                                  contact_nick: results['contact_nickname'],
-                                 region_code: region['region_code'],
-                                 monitor: results['monitor'],
-                                 serve_count: region['serve_count'],
-                                 min_healthy: region['min_healthy']
+                                 region_code:  region['region_code'],
+                                 monitor:      results['monitor'],
+                                 serve_count:  region['serve_count'],
+                                 min_healthy:  region['min_healthy']
                                    )
         else
           @dyn.get(resource_path)
@@ -153,13 +153,13 @@ module Dyn
 
       def to_json
         {
-          'ttl'   => @ttl,
-          'monitor' => @monitor,
-          'region' => {
+          'ttl'              => @ttl,
+          'monitor'          => @monitor,
+          'region'           => {
             'region_code' => @region_code,
             'serve_count' => @serve_count,
             'min_healthy' => @min_healthy,
-            'pool' => @host_list.values
+            'pool'        => @host_list.values
           },
           'contact_nickname' => @contact_nick
         }.to_json

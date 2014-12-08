@@ -18,10 +18,10 @@ RSpec.configure do |config|
   end
 
   config.before(:all) do
-    @DEFAULT_API_KEY = 1
-    @API_BASE_PATH = 'https://emailapi.dynect.net/rest/json'
+    @default_api_key = 1
+    @api_base_path = 'https://emailapi.dynect.net/rest/json'
 
-    @dyn = Dyn::Messaging::Client.new(@DEFAULT_API_KEY)
+    @dyn = Dyn::Messaging::Client.new(@default_api_key)
   end
 
 end

@@ -71,11 +71,11 @@ module Dyn
 
       def to_json
         {
-          'zone' => @zone,
-          'fqdn' => @fqdn,
-          'code' => @code,
+          'zone'     => @zone,
+          'fqdn'     => @fqdn,
+          'code'     => @code,
           'keep_uri' => @keep_uri,
-          'url' => @url
+          'url'      => @url
         }.to_json
       end
     end
