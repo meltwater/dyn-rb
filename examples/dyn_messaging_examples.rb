@@ -35,6 +35,16 @@ puts dyn.accounts.list_xheaders
 puts 'deleting account...'
 puts dyn.accounts.destroy('account@example.com')
 
+# recipients
+puts 'getting a single reciepient\'s status'
+puts dyn.recipients.status('account@example.com')
+puts 'getting multiple reciepients\' statuses'
+puts dyn.recipients.statuses(['account1@example.com', 'account2@example.com'])
+
+# activating recipients
+puts 'getting reciepients status'
+puts dyn.recipients.activate('account@example.com')
+
 # senders
 puts 'retrieving senders list...'
 puts dyn.senders.list

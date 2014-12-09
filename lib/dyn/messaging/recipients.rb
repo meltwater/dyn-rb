@@ -27,6 +27,11 @@ module Dyn
         @dyn.get("#{resource_path}/status", emailaddress: email)
       end
 
+      def statuses(emails_array)
+        comma_seperated_emails = emails_array.compact.uniq.join(', ')
+        @dyn.get("#{resource_path}/status", emailaddress: comma_seperated_emails)
+      end
+
       def activate(email)
         @dyn.post("#{resource_path}/activate", emailaddress: email)
       end
