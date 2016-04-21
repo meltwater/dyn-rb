@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,9 +46,10 @@ module Dyn
       #
       # @param [String] Your dyn api key
       # @param [Boolean] Verbosity
-      def initialize(apikey, verbose=false)
+      # @param [Integer] Request Timeout
+      def initialize(apikey, verbose=false, timeout=60)
         @apikey = apikey
-        @rest = Dyn::HttpClient::DefaultClient.new("emailapi.dynect.net", "443", "https")
+        @rest = Dyn::HttpClient::DefaultClient.new("emailapi.dynect.net", "443", "https", timeout)
         @rest.default_headers = {
           'User-Agent'   => Dyn::VERSION,
           'Content-Type' => 'application/x-www-form-urlencoded'

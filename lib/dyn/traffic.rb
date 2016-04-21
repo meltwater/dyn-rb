@@ -8,9 +8,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,16 +47,17 @@ module Dyn
       # @param [String] The zone you are going to be editing
       # @param [Boolean] Whether to connect immediately or not - runs login for you
       # @param [Boolean] Verbosity
-      def initialize(customer_name, user_name, password, zone=nil, connect=true, verbose=false, max_redirects=10)
+      # @param [Integer] Request Timeout
+      def initialize(customer_name, user_name, password, zone=nil, connect=true, verbose=false, max_redirects=10, timeout=60)
         @customer_name = customer_name
         @user_name = user_name
         @password = password
-        @rest = Dyn::HttpClient::DefaultClient.new("api2.dynect.net", "443", "https")
+        @rest = Dyn::HttpClient::DefaultClient.new("api2.dynect.net", "443", "https", timeout)
         @rest.default_headers = {
           'User-Agent'   => Dyn::VERSION,
           'Content-Type' => 'application/json'
         }
-        @zone = zone 
+        @zone = zone
         @verbose = verbose
         @session = Dyn::Traffic::Session.new(self)
         login if connect
@@ -201,7 +202,7 @@ module Dyn
       def api_request(&block)
         response = block.call
         if response.status == 307 and response.body =~ /^\/REST\//
-          response.body.sub!('/REST/','') 
+          response.body.sub!('/REST/','')
           response = get(response.body)
         end
         parse_response(response.body && response.body.length >= 2 ? JSON.parse(response.body) : {})
@@ -227,7 +228,7 @@ module Dyn
           response["msgs"].each do |error_message|
             error_messages << "#{error_message["LVL"]} #{error_message["ERR_CD"]} #{error_message["SOURCE"]} - #{error_message["INFO"]}"
           end
-          raise Dyn::Exceptions::RequestFailed, "Request failed: #{error_messages.join("\n")}" 
+          raise Dyn::Exceptions::RequestFailed, "Request failed: #{error_messages.join("\n")}"
         end
       end
     end

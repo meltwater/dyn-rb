@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,9 +22,10 @@ module Dyn
       attr_reader :host, :port, :base_url
       attr_accessor :default_headers, :request_handler, :response_handler
 
-      def initialize(host, port, protocol = 'http')
+      def initialize(host, port, protocol = 'http', timeout = 60)
         @host = host
         @port = port
+        @timeout = timeout
         @base_url = "#{protocol}://#{host}:#{port.to_s}"
         @default_headers = {"User-Agent" => "dyn-rb 0.0.1"}
       end
@@ -79,7 +80,7 @@ module Dyn
 
     class Response
       attr_reader :status, :body, :headers
-    
+
       def initialize(status, body, headers)
         @status  = status
         @body    = body
