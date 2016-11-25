@@ -139,7 +139,11 @@ module Dyn
           response.body
         end
 
-        response = response_body && response_body.length >= 2 ? JSON.parse(response_body) : {}
+        begin
+          response = response_body && response_body.length >= 2 ? JSON.parse(response_body) : {}
+        rescue JSON::ParserError
+          response = {}
+        end
 
         if (response["response"] && response["response"]["status"] == 200)
           response["response"]["data"]
